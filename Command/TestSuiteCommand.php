@@ -8,8 +8,10 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\Finder\Finder;
 use WeDoCode\Bundle\WeDoCodeTestSuiteBundle\Loader\AttributeClassLoader;
+use function file_get_contents;
 
 class TestSuiteCommand extends Command
 {
@@ -42,10 +44,14 @@ class TestSuiteCommand extends Command
             return Command::FAILURE;
         }
 
-        foreach ($files as $file) {
-            $output->writeln($file->getPathName());
-        }
+//        foreach ($files as $file) {
+//            $output->writeln($file->getPathName());
+//        }
+        $phpunitXML = file_get_contents('phpunit.xml');
+        $crawler = new Crawler($phpunitXML);
 
+        
+          
         return Command::SUCCESS;
     }
 }
