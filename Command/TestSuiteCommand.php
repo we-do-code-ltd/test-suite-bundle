@@ -13,11 +13,10 @@ use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\Finder\Finder;
 use WeDoCode\Bundle\WeDoCodeTestSuiteBundle\Loader\AttributeClassLoader;
 
-use function file_get_contents;
+use function array_map;
 use function file_put_contents;
-use function get_declared_classes;
+use function implode;
 use function passthru;
-use function shell_exec;
 use function sprintf;
 
 class TestSuiteCommand extends Command
@@ -39,11 +38,10 @@ class TestSuiteCommand extends Command
 
         // gathering the files we work on
         $loader = new AttributeClassLoader();
-        $finder = new Finder();
         $suite = $input->getArgument('suite');
 
         $testFiles = $loader
-            ->load($finder
+            ->load((new Finder())
                 ->files()
                 ->in('tests')
                 ->followLinks()
@@ -52,7 +50,7 @@ class TestSuiteCommand extends Command
             )->get($suite);
 
         $sourceFiles = $loader
-            ->load($finder
+            ->load((new Finder())
                 ->files()
                 ->in('src')
                 ->followLinks()
@@ -102,7 +100,7 @@ class TestSuiteCommand extends Command
         $coverage->setAttribute('cacheDirectory', 'var/cache/phpunit/code-coverage');
         $coverage->setAttribute('processUncoveredFiles', 'true');
         $include = $document->createElement('include');
-        
+
         foreach ($sourceFiles as $file) {
             $include->appendChild($document->createElement('file', $file->getRealPath()));
         }
@@ -122,16 +120,18 @@ class TestSuiteCommand extends Command
             --configuration=%s', $suite, $phpunitFile)
         );
 
+        $fileList = implode(',', array_map(fn($file) => $file->getRealPath(), $sourceFiles));
+
         passthru(sprintf('vendor/bin/infection \
                   --only-covered \
                   --min-covered-msi=100 \
                   -j$(nproc) \
                   --filter=%s \
                   --ignore-msi-with-no-mutations \
-                  --coverage=/tmp/coverage \
+                  --coverage=var/coverage/ \
                   --skip-initial-tests \
                   --test-framework-options="--configuration=%s"
-            ', implode(',', array_map(fn($file) => $file->getRealPath(), $sourceFiles)), $phpunitFile));
+            ', $fileList, $phpunitFile));
 
         return Command::SUCCESS;
     }
