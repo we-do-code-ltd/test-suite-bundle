@@ -112,6 +112,7 @@ class TestSuiteCommand extends Command
         file_put_contents($phpunitFile, $document->saveXml());
 
         passthru(sprintf('vendor/bin/phpunit \
+            --colors \
             --coverage-text \
             --coverage-xml=var/coverage/coverage-xml \
             --coverage-html=var/coverage/html \
@@ -120,7 +121,7 @@ class TestSuiteCommand extends Command
             --configuration=%s', $suite, $phpunitFile)
         );
 
-        $fileList = implode(',', array_map(fn($file) => $file->getRealPath(), $sourceFiles));
+        $souceFileList = implode(',', array_map(fn($file) => $file->getRealPath(), $sourceFiles));
 
         passthru(sprintf('vendor/bin/infection \
                   --only-covered \
@@ -131,7 +132,40 @@ class TestSuiteCommand extends Command
                   --coverage=var/coverage/ \
                   --skip-initial-tests \
                   --test-framework-options="--configuration=%s"
-            ', $fileList, $phpunitFile));
+            ', $souceFileList, $phpunitFile));
+
+        #Run Stan
+        passthru(
+            sprintf(
+                "vendor/bin/phpstan analyse \
+                    --level=max \
+                    --configuration=phpstan-src.neon \
+                   %s",
+                implode(' ', array_map(fn($file) => $file->getRealPath(), $sourceFiles)),
+            )
+        );
+
+        passthru(
+            sprintf(
+                "vendor/bin/phpstan analyse \
+                    --level=max \
+                    --configuration=phpstan-src.neon \
+                   %s",
+                implode(' ', array_map(fn($file) => $file->getRealPath(), $testFiles)),
+            )
+        );
+
+        # Run PHPCS
+        passthru(
+            sprintf(
+                "vendor/bin/phpcs src/Kernel.php %s %s",
+                implode(' ', array_map(fn($file) => $file->getRealPath(), $sourceFiles)),
+                implode(' ', array_map(fn($file) => $file->getRealPath(), $testFiles)),
+            )
+        );
+        
+        # Composer validate
+        passthru("composer validate --strict");
 
         return Command::SUCCESS;
     }
