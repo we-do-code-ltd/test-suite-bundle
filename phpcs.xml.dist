@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<ruleset name="WeDoCode">
+
+    <rule ref="PSR1">
+        <exclude name="PSR1.Files.SideEffects" />
+    </rule>
+    <rule ref="PSR2" />
+    <rule ref="PSR12" />
+
+    <rule ref="Generic.Arrays.ArrayIndent" />
+    <rule ref="Generic.Formatting.SpaceAfterCast" />
+
+    <rule ref="Squiz.WhiteSpace.FunctionSpacing">
+        <properties>
+            <property name="spacing" value="1" />
+            <property name="spacingBeforeFirst" value="0" />
+            <property name="spacingAfterLast" value="0" />
+        </properties>
+    </rule>
+
+    <rule ref="Squiz.WhiteSpace.SuperfluousWhitespace">
+        <properties>
+            <property name="ignoreBlankLines" value="false" />
+        </properties>
+    </rule>
+
+    <rule ref="Squiz.WhiteSpace.MemberVarSpacing">
+        <properties>
+            <property name="spacing" value="1" />
+            <property name="spacingBeforeFirst" value="0" />
+        </properties>
+    </rule>
+
+    <rule ref="Squiz.WhiteSpace.OperatorSpacing" />
+    <rule ref="Squiz.WhiteSpace.SemicolonSpacing" />
+    <rule ref="Squiz.WhiteSpace.LanguageConstructSpacing" />
+
+    <rule ref="Squiz.Arrays.ArrayDeclaration">
+        <exclude name="Squiz.Arrays.ArrayDeclaration.CloseBraceNotAligned" />
+        <exclude name="Squiz.Arrays.ArrayDeclaration.DoubleArrowNotAligned" />
+        <exclude name="Squiz.Arrays.ArrayDeclaration.KeyNotAligned" />
+        <exclude name="Squiz.Arrays.ArrayDeclaration.MultiLineNotAllowed" />
+        <exclude name="Squiz.Arrays.ArrayDeclaration.SingleLineNotAllowed" />
+        <exclude name="Squiz.Arrays.ArrayDeclaration.SpaceAfterDoubleArrow" />
+        <exclude name="Squiz.Arrays.ArrayDeclaration.SpaceBeforeDoubleArrow" />
+        <exclude name="Squiz.Arrays.ArrayDeclaration.ValueNotAligned" />
+    </rule>
+
+    <rule ref="./src" />
+
+</ruleset>
