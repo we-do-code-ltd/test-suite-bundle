@@ -23,6 +23,7 @@
         "infection/infection": "^0.21",
         "johnkary/phpunit-speedtrap": "^4.0-dev",
         "phpunit/phpunit": "^9.5",
+        "phpstan/phpstan": "^0.12",
         "squizlabs/php_codesniffer": "^3.5",
         "symfony/dependency-injection": "^5.2",
         "symfony/config": "^5.2",
