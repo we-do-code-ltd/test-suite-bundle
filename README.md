@@ -48,3 +48,8 @@ but all commands will use / manipulate the the original tool config configuratio
 
 Example: 
 - for PHP unit we will add a testsuite node to the project phpunit.xml with a list of files in the specified testsuite.
+
+#### Configuration for individual tools: 
+- You will need to configure the individual tools to your project needs.
+- We are providing some basic example configuration for each tool, these are `.dist` files in bundle root directory you can copy these
+to your project root and loose the `.dist` extension. This way you can start testing with our default rule sets.   
