@@ -149,7 +149,7 @@ class TestSuiteCommand extends Command
             sprintf(
                 "vendor/bin/phpstan analyse \
                     --level=max \
-                    --configuration=phpstan-src.neon \
+                    --configuration=phpstan-tests.neon \
                    %s",
                 implode(' ', array_map(fn($file) => $file->getRealPath(), $testFiles)),
             )
